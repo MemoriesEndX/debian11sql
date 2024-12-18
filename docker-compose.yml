@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  debian-python:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dockerpercona-python-container
+    volumes:
+      - ./app:/app
+    tty: true
+    depends_on:
+      - percona
+
+  percona:
+    image: percona/percona-server:8.0
+    container_name: dockerpercona-percona-container
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    ports:
+      - "3309:3306"
+    volumes:
+      - dockerpercona-percona-data:/var/lib/mysql
+
+volumes:
+  dockerpercona-percona-data:
